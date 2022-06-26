@@ -17,22 +17,29 @@ const client = new MongoClient(uri, {
 });
 // console.log(uri);
 async function run() {
-  try{
+  try {
     await client.connect();
-    console.log("database connected successfully");
-  }  
-  finally{
+    const database = client.db("healthy_life");
+    const productsCollection = database.collection("products");
+    // console.log("database connected successfully");
 
+    // [post]
+    app.post("/products", async (req, res) => {
+      const product = req.body;
+      const result = await productsCollection.insertOne(product);
+      console.log(result);
+      res.json(result);
+    });
+  } finally {
+    //await client.close();
   }
 }
-run().catch(console.dir)
-
-
+run().catch(console.dir);
 
 app.get("/", (req, res) => {
   res.send("Hello from  Healthy life store !");
 });
 //runkit.com/
 https: app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+  console.log(`Server is listening on  htts//:localhost : ${PORT}`);
 });
